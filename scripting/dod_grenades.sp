@@ -39,24 +39,24 @@ public Plugin:myinfo =
  * -------------------------------------------------------------------------- */
 public OnPluginStart()
 {
-	// Get m_iAmmo offset. Register some ConVars and hook events on success
-	if ((m_iAmmo = FindSendPropOffs("CDODPlayer", "m_iAmmo")) != -1)
-	{
-		// Convar will not be saved in plugin's config if its having FCVAR_DONTRECORD flag
-		CreateConVar("dod_grenades_version", PLUGIN_VERSION, PLUGIN_NAME, FCVAR_NOTIFY|FCVAR_DONTRECORD);
+	// Get m_iAmmo array offset. If it was not found, disable plugin and log error (unsupported mod maybe)
+	if ((m_iAmmo = FindSendPropOffs("CDODPlayer", "m_iAmmo")) == -1)
+		SetFailState("Fatal Error: Unable to find prop offset \"CDODPlayer::m_iAmmo\"!");
 
-		nades_enabled  = CreateConVar("dod_grenades_enable",  "1",     "Whether or not enable DoD:S Grenades Giver", FCVAR_PLUGIN, true, 0.0, true, 1.0);
+	// Convar will not be saved in plugin's config if its having FCVAR_DONTRECORD flag
+	CreateConVar("dod_grenades_version", PLUGIN_VERSION, PLUGIN_NAME, FCVAR_NOTIFY|FCVAR_DONTRECORD);
 
-		// 1 = Rifleman, 2 = Assault, 3 = Support, 4 = Sniper, 5 = MG, 6 = Rocket
-		nades_classes  = CreateConVar("dod_grenades_classes", "4 5 6", "Give grenades to # classes\n1 = Rifleman, 2 = Assault...",   FCVAR_PLUGIN);
-		nades_amount   = CreateConVar("dod_grenades_amount",  "1",     "Determines amount of grenades to give to a desired classes", FCVAR_PLUGIN, true, 1.0);
+	nades_enabled  = CreateConVar("dod_grenades_enable",  "1",     "Whether or not enable DoD:S Grenades Giver", FCVAR_PLUGIN, true, 0.0, true, 1.0);
 
-		// Equip grenades after spawn
-		HookEvent("player_spawn", OnPlayerSpawn, EventHookMode_Post);
+	// 1 = Rifleman, 2 = Assault, 3 = Support, 4 = Sniper, 5 = MG, 6 = Rocket
+	nades_classes  = CreateConVar("dod_grenades_classes", "4 5 6", "Give grenades to # classes\n1 = Rifleman, 2 = Assault...",   FCVAR_PLUGIN);
+	nades_amount   = CreateConVar("dod_grenades_amount",  "1",     "Determines amount of grenades to give to a desired classes", FCVAR_PLUGIN, true, 1.0);
 
-		// Create and exec config
-		AutoExecConfig();
-	}
+	// Equip grenades after spawn
+	HookEvent("player_spawn", OnPlayerSpawn, EventHookMode_Post);
+
+	// Create and exec config
+	AutoExecConfig();
 }
 
 /* OnPlayerSpawn()
