@@ -30,7 +30,7 @@ public Plugin:myinfo =
 	description = "Simply gives desired amount of frag grenades to desired player classes",
 	version     = PLUGIN_VERSION,
 	url         = "http://dodsplugins.com/",
-};
+}
 
 
 /* OnPluginStart()
@@ -41,7 +41,7 @@ public OnPluginStart()
 {
 	// Get m_iAmmo array offset. If it was not found, disable plugin and log error (unsupported mod maybe)
 	if ((m_iAmmo = FindSendPropOffs("CDODPlayer", "m_iAmmo")) == -1)
-		SetFailState("Fatal Error: Unable to find prop offset \"CDODPlayer::m_iAmmo\"!");
+		SetFailState("Fatal Error: Unable to find prop offset \"CDODPlayer::m_iAmmo\" !");
 
 	// Convar will not be saved in plugin's config if its having FCVAR_DONTRECORD flag
 	CreateConVar("dod_grenades_version", PLUGIN_VERSION, PLUGIN_NAME, FCVAR_NOTIFY|FCVAR_DONTRECORD);
